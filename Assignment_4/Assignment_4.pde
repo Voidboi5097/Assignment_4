@@ -15,11 +15,7 @@ void setup(){
 }
 
 void draw(){
-  if (!songStart){
-    grasswalk.play();
-    songStart = true;
-  }
-  Metronome();
+  
 }
 
 
