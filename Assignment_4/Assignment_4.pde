@@ -18,7 +18,7 @@ Menus screenManager;
 void setup(){
   size(400,400);
   
-  currentScreen = 5;
+  currentScreen = 1;
   
   grasswalk = new SoundFile(this, "Grasswalk.wav");
   
@@ -29,6 +29,8 @@ void setup(){
 
 void draw(){
   background(0);
+  
+  Metronome();
   
   switch(currentScreen){
     case 1:
