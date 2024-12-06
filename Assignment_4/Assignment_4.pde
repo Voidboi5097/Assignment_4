@@ -7,8 +7,6 @@ PImage heartIcon;
 boolean [] keys = new boolean[128];
 
 int noteLossLimit = 400;
-int note;
-int bar;
 int frameCounter;
 int currentScreen = 1;
 int score;
@@ -18,9 +16,9 @@ int playerHealth = 5;
 
 PVector beatTemp = new PVector();
 PVector targetBar = new PVector(50, 350);
-PVector metronomeStart = new PVector (0,1);
+PVector metronomeStart = new PVector (0,0);
 PVector metronome = metronomeStart.copy();
-PVector timeLimit = new PVector(30,1);
+PVector timeLimit = new PVector();
 
 Menus screenManager;
 
@@ -35,9 +33,6 @@ void setup(){
   hitSpark = loadImage("Hit Spark.png");
   heartIcon = loadImage("Heart Icon.png");
   
-  note = int(metronome.y-1);
-  bar = int(metronome.x);
-  
   grasswalk = new SoundFile(this, "Grasswalk.wav");
   screenManager = new Menus();
   beatmap = loadTable("Beatmap.csv", "header");
@@ -50,6 +45,7 @@ void setup(){
     notes.add(new Notes(beatTemp));
   }
   
+  timeLimit = new PVector(notes.get(notes.size()-1).getNoteInfo().x +5, 1.0);
   
 }
 
@@ -68,7 +64,7 @@ void draw(){
       Metronome();
       if (noteIndex <= notes.size()-1){
         if (metronome.x == notes.get(noteIndex).getNoteInfo().x && metronome.y == notes.get(noteIndex).getNoteInfo().y){
-          activeNotes.add(notes.get(noteIndex));
+          activeNotes.add(new Notes(notes.get(noteIndex).getNoteInfo()));
           noteIndex++;
         }
       }
@@ -98,7 +94,8 @@ void draw(){
       screenManager.perfectScreen();
       break;
     case 5:
-      grasswalk.pause();
+      if (grasswalk.isPlaying())
+        grasswalk.pause();
       screenManager.failScreen();
       break;
   }
@@ -118,13 +115,12 @@ void valueReset(){
 void Metronome(){
   frameCounter++;
   if (frameCounter%15 == 0){
-    note++;
-    if (note >8){
-      note = 1;
-      bar++;
-      metronome.x = bar;
+    if (metronome.y == 8){
+      metronome.y = 0;
+      metronome.x++;
     }
-    metronome.y = note;
+    metronome.y++;
+    println("("+metronome.x+", "+metronome.y+")");
   }
 }
 
@@ -198,13 +194,14 @@ void keyPressed(){
         noteCheck(6);
       break;
   }
-  
-  keys[key] = true;
+  if (key < keys.length)
+    keys[key] = true;
 
 }
 
 void keyReleased(){
-  keys[key] = false;
+  if (key < keys.length)
+    keys[key] = false;
 }
 
 void mouseClicked(){
