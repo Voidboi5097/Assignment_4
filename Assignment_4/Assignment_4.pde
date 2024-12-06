@@ -2,42 +2,70 @@ import processing.sound.*;
 SoundFile grasswalk;
 
 boolean [] keys = new boolean[128];
+boolean songStart = false;
 
-int note = 0;
-int bar = 1;
+int note;
+int bar;
 int frameCounter;
-int currentScreen;
+int currentScreen = 1;
 int score;
+int noteIndex;
 
-PVector timeMeasure = new PVector(1,1);
+PVector metronome = new PVector(0,1);
+PVector beatTemp = new PVector();
 
-boolean songStart;
+
+
 
 Menus screenManager;
+
+ArrayList<Notes> notes = new ArrayList<Notes>();
+ArrayList<Notes> activeNotes = new ArrayList<Notes>();
+
+Table beatmap;
 
 void setup(){
   size(400,400);
   
-  currentScreen = 1;
+  note = int(metronome.y-1);
+  bar = int(metronome.x);
   
   grasswalk = new SoundFile(this, "Grasswalk.wav");
-  
   screenManager = new Menus();
+  beatmap = loadTable("Beatmap.csv", "header");
+  
+  for (TableRow row: beatmap.rows()){
+    beatTemp.x = row.getInt("Bar");
+    beatTemp.y = row.getInt("Beat");
+    beatTemp.z = row.getInt("Type");
+    
+    notes.add(new Notes(beatTemp));
+  }
   
   
 }
 
 void draw(){
   background(0);
-  
-  Metronome();
-  
   switch(currentScreen){
     case 1:
       screenManager.mainMenu();
       break;
     case 2:
       screenManager.laneHighway(keys['a'], keys['s'], keys['d'], keys['j'], keys['k'], keys['l']);
+      if (!songStart){
+        songStart = true;
+        grasswalk.play();
+      }
+      Metronome();
+      if (metronome.x == notes.get(noteIndex).getNoteInfo().x && metronome.y == notes.get(noteIndex).getNoteInfo().y){
+        activeNotes.add(notes.get(noteIndex));
+        if (noteIndex+1 > notes.size())
+          noteIndex++;
+      }
+      for (int i = activeNotes.size() ; i> 0 ; i--){
+        activeNotes.get(i-1).Display();
+      }
       break;
     case 3:
       screenManager.winScreen(score);
@@ -59,10 +87,10 @@ void Metronome(){
     if (note >8){
       note = 1;
       bar++;
-      timeMeasure.y = bar;
+      metronome.x = bar;
     }
-    timeMeasure.x = note;
-    print(timeMeasure);
+    metronome.y = note;
+    print("("+metronome.x+", "+metronome.y+")");
   }
 }
 
