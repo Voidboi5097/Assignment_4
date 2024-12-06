@@ -142,14 +142,14 @@ class Menus{
   
 /*-----------------------------------------------------------------------------------------------*/
 
-  void winScreen(int points){
+  void winScreen(int points, int maxScore){
     image (youRock, 32,50);
     
     image (score, 125,172);
     
     fill (255);
     textSize(30);
-    text(points + "/XXX", 200,200);
+    text(points + "/"+ maxScore, 200,200);
     
     if (mouseX >= 140 && mouseX <= 260 && mouseY >= 225 && mouseY <= 285)
       image(retryHighlight,140,225);

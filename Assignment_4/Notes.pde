@@ -12,10 +12,9 @@ class Notes{
   
   Notes(PVector noteInformation){
     
-    noteInfo.x = noteInformation.x;
-    noteInfo.y = noteInformation.y;
+    noteInfo = noteInformation.copy();
     
-    switch(int(noteInformation.z)){
+    switch(int(noteInfo.z)){
       case 1:
         noteImage = loadImage("Note 1.png");
         position = new PVector(38,0);
@@ -54,5 +53,11 @@ class Notes{
 
   PVector getNoteInfo(){
     return noteInfo;
+  }
+  
+/*-----------------------------------------------------------------------------------------------*/
+  
+  PVector getPosition(){
+    return position;
   }
 }

@@ -1,6 +1,8 @@
 import processing.sound.*;
 SoundFile grasswalk;
 
+PImage hitSpark;
+
 boolean [] keys = new boolean[128];
 boolean songStart = false;
 
@@ -10,12 +12,12 @@ int frameCounter;
 int currentScreen = 1;
 int score;
 int noteIndex;
+int streak;
 
-PVector metronome = new PVector(0,1);
 PVector beatTemp = new PVector();
-
-
-
+PVector targetBar = new PVector(50, 300);
+PVector metronome = new PVector(0,1);
+PVector timeLimit = new PVector(30,1);
 
 Menus screenManager;
 
@@ -26,6 +28,8 @@ Table beatmap;
 
 void setup(){
   size(400,400);
+  
+  hitSpark = loadImage("Hit Spark.png");
   
   note = int(metronome.y-1);
   bar = int(metronome.x);
@@ -58,17 +62,26 @@ void draw(){
         grasswalk.play();
       }
       Metronome();
-      if (metronome.x == notes.get(noteIndex).getNoteInfo().x && metronome.y == notes.get(noteIndex).getNoteInfo().y){
-        activeNotes.add(notes.get(noteIndex));
-        if (noteIndex+1 > notes.size())
+      if (noteIndex >= notes.size()-1){
+        if (metronome.x == notes.get(noteIndex).getNoteInfo().x && metronome.y == notes.get(noteIndex).getNoteInfo().y){
+          println("Added note "+noteIndex);
+          activeNotes.add(notes.get(noteIndex));
           noteIndex++;
+        }
       }
-      for (int i = activeNotes.size() ; i> 0 ; i--){
-        activeNotes.get(i-1).Display();
+      for (int i = activeNotes.size()-1 ; i>= 0 ; i--){
+          activeNotes.get(i).Display();
+      }
+      
+      if (PVector.dist(metronome, timeLimit) == 0){
+        if (score == notes.size())
+          currentScreen = 4;
+        else
+          currentScreen = 3;
       }
       break;
     case 3:
-      screenManager.winScreen(score);
+      screenManager.winScreen(score, notes.size());
       break;
     case 4:
       screenManager.perfectScreen();
@@ -90,14 +103,58 @@ void Metronome(){
       metronome.x = bar;
     }
     metronome.y = note;
-    print("("+metronome.x+", "+metronome.y+")");
+  }
+}
+
+void noteCheck(float lane){
+  targetBar = new PVector (50+(60*(lane-1)), 300);
+  for (int i = 0 ; i < activeNotes.size(); i++){
+    if (activeNotes.get(i).getNoteInfo().z == lane && PVector.dist(activeNotes.get(i).getPosition(), targetBar) < 50){
+      activeNotes.remove(i);
+      image(hitSpark, (targetBar.x-25), (targetBar.y-25));
+      score++;
+      streak++;
+    }
   }
 }
 
 
-
 void keyPressed(){
+  switch(key){
+    case 'a':
+    case 'A':
+      if (!keys['a'])
+        noteCheck(1);
+      break;
+    case 's':
+    case 'S':
+      if (!keys['s'])
+        noteCheck(2);
+      break;
+    case 'd':
+    case 'D':
+      if (!keys['d'])
+        noteCheck(3);
+      break;
+    case 'j':
+    case 'J':
+      if (!keys['j'])
+        noteCheck(4);
+      break;
+    case 'k':
+    case 'K':
+      if (!keys['k'])
+        noteCheck(5);
+      break;
+    case 'l':
+    case 'L':
+      if (!keys['l'])
+        noteCheck(6);
+      break;
+  }
+  
   keys[key] = true;
+
 }
 
 void keyReleased(){
