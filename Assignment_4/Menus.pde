@@ -41,8 +41,6 @@ class Menus{
   
   PImage fail;
   
-  int menu;
-  
   Menus(){
     gameName = loadImage("Game Name.png");
     
@@ -88,31 +86,21 @@ class Menus{
   
 /*-----------------------------------------------------------------------------------------------*/
   
-  int mainMenu(){
+  void mainMenu(){
     image(gameName, 63,25);
     
     
     
-    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 225 && mouseY <= 274){
+    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 225 && mouseY <= 274)
       image(startHighlight,140,225);
-      if (mousePressed){
-        int menu = 2;
-        return menu;
-      }
-    }
-    else{
+    else
       image(start,140,225);
-    }
     
-    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 300 && mouseY <= 349){
+    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 300 && mouseY <= 349)
       image(quitHighlight,140,300);
-      if (mousePressed)
-        exit();
-    }
-    else{
+    else
       image(quit,140,300);
-    }
-    return menu;
+      
   }
   
 /*-----------------------------------------------------------------------------------------------*/
@@ -154,7 +142,7 @@ class Menus{
   
 
 
-  int winScreen(int points){
+  void winScreen(int points){
     image (youRock, 32,50);
     
     image (score, 125,172);
@@ -163,89 +151,55 @@ class Menus{
     textSize(30);
     text(points + "/XXX", 200,200);
     
-    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 225 && mouseY <= 285){
+    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 225 && mouseY <= 285)
       image(retryHighlight,140,225);
-      if (mousePressed){
-        int menu = 1;
-        return menu;
-      }
-    }
-    else{
+    else
       image(retry,140,225);
-    }
     
     
-    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 300 && mouseY <= 349){
+    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 300 && mouseY <= 349)
       image(quitHighlight,140,300);
-      if (mousePressed)
-        exit();
-    }
-    else{
+    else
       image(quit,140,300);
-    }
     
-    return menu;
   }
   
 /*-----------------------------------------------------------------------------------------------*/
 
-  int perfectScreen(){
+  void perfectScreen(){
     image (perfect, 1, 25);
     
     image (reallyRock, 45, 140);
     
     
-    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 225 && mouseY <= 285){
+    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 225 && mouseY <= 285)
       image(retryHighlight,140,225);
-      if (mousePressed){
-        int menu = 1;
-        return menu;
-      }
-    }
-    else{
+    else
       image(retry,140,225);
-    }
     
     
-    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 300 && mouseY <= 349){
+    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 300 && mouseY <= 349)
       image(quitHighlight,140,300);
-      if (mousePressed)
-        exit();
-    }
-    else{
+    else
       image(quit,140,300);
-    }
-    
-    return menu;
   }
   
 /*-----------------------------------------------------------------------------------------------*/
 
-  int failScreen(){
+  void failScreen(){
     
     image(fail, 30, 25);
     
     
-    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 225 && mouseY <= 285){
+    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 225 && mouseY <= 285)
       image(retryHighlight,140,225);
-      if (mousePressed){
-        int menu = 1;
-        return menu;
-      }
-    }
-    else{
+    else
       image(retry,140,225);
-    }
     
     
-    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 300 && mouseY <= 349){
+    if (mouseX >= 140 && mouseX <= 260 && mouseY >= 300 && mouseY <= 349)
       image(quitHighlight,140,300);
-      if (mousePressed)
-        exit();
-    }
-    else{
+    else
       image(quit,140,300);
-    }
-    return menu;
   }
 }
