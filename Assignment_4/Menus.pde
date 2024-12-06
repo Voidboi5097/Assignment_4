@@ -107,37 +107,37 @@ class Menus{
   
   void laneHighway(boolean a, boolean s, boolean d, boolean j, boolean k, boolean l){
     
-    image (laneHighway, 0, 0);
+    image (laneHighway, 0, 50);
     
     if (a)
-      image (aButtonPressed, 25,275);
+      image (aButtonPressed, 25,325);
     else
-      image (aButton, 25,275);
+      image (aButton, 25,325);
     
     if (s)
-      image (sButtonPressed, 85, 275);
+      image (sButtonPressed, 85, 325);
     else
-      image (sButton, 85, 275);
+      image (sButton, 85, 325);
     
     if (d)
-      image (dButtonPressed, 145, 275);
+      image (dButtonPressed, 145, 325);
     else
-      image (dButton, 145, 275);
+      image (dButton, 145, 325);
     
     if (j)
-      image (jButtonPressed, 205, 275);
+      image (jButtonPressed, 205, 325);
     else
-      image (jButton, 205, 275);
+      image (jButton, 205, 325);
     
     if (k)
-      image (kButtonPressed, 265, 275);
+      image (kButtonPressed, 265, 325);
     else
-      image (kButton, 265, 275);
+      image (kButton, 265, 325);
     
     if (l)
-      image (lButtonPressed, 325, 275);
+      image (lButtonPressed, 325, 325);
     else
-      image (lButton, 325, 275);
+      image (lButton, 325, 325);
   }
   
 /*-----------------------------------------------------------------------------------------------*/

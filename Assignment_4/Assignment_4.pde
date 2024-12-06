@@ -2,10 +2,11 @@ import processing.sound.*;
 SoundFile grasswalk;
 
 PImage hitSpark;
+PImage heartIcon;
 
 boolean [] keys = new boolean[128];
-boolean songStart = false;
 
+int noteLossLimit = 400;
 int note;
 int bar;
 int frameCounter;
@@ -16,8 +17,9 @@ int streak;
 int playerHealth = 5;
 
 PVector beatTemp = new PVector();
-PVector targetBar = new PVector(50, 300);
-PVector metronome = new PVector(0,1);
+PVector targetBar = new PVector(50, 350);
+PVector metronomeStart = new PVector (0,1);
+PVector metronome = metronomeStart.copy();
 PVector timeLimit = new PVector(30,1);
 
 Menus screenManager;
@@ -31,6 +33,7 @@ void setup(){
   size(400,400);
   
   hitSpark = loadImage("Hit Spark.png");
+  heartIcon = loadImage("Heart Icon.png");
   
   note = int(metronome.y-1);
   bar = int(metronome.x);
@@ -54,18 +57,17 @@ void draw(){
   background(0);
   switch(currentScreen){
     case 1:
+      valueReset();
       screenManager.mainMenu();
       break;
     case 2:
       screenManager.laneHighway(keys['a'], keys['s'], keys['d'], keys['j'], keys['k'], keys['l']);
-      if (!songStart){
-        songStart = true;
-        grasswalk.play();
+      if (!grasswalk.isPlaying()){
+        grasswalk.jump(0);
       }
       Metronome();
       if (noteIndex <= notes.size()-1){
         if (metronome.x == notes.get(noteIndex).getNoteInfo().x && metronome.y == notes.get(noteIndex).getNoteInfo().y){
-          println("Added note "+noteIndex);
           activeNotes.add(notes.get(noteIndex));
           noteIndex++;
         }
@@ -74,9 +76,9 @@ void draw(){
           activeNotes.get(i).Display();
           noteManager();
       }
-      
-      if (playerHealth <= 0)
-        currentScreen = 5;
+      fill(0);
+      rect(0,0,400,50);
+      healthManager();
       
       if (PVector.dist(metronome, timeLimit) == 0){
         if (score == notes.size())
@@ -86,27 +88,32 @@ void draw(){
       }
       break;
     case 3:
+      if (grasswalk.isPlaying())
+        grasswalk.pause();
       screenManager.winScreen(score, notes.size());
       break;
     case 4:
+      if (grasswalk.isPlaying())
+        grasswalk.pause();
       screenManager.perfectScreen();
       break;
     case 5:
+      grasswalk.pause();
       screenManager.failScreen();
       break;
   }
 }
 
-void noteManager(){
+void valueReset(){
+  score = 0;
+  streak = 0;
+  playerHealth = 5;
+  metronome = metronomeStart.copy();
+  noteIndex = 0;
   for (int i = 0 ; i < activeNotes.size(); i++){
-    if (activeNotes.get(i).getPosition().y >= 350){
       activeNotes.remove(i);
-      playerHealth--;
-      streak = 0;
-    }
   }
 }
-
 
 void Metronome(){
   frameCounter++;
@@ -121,8 +128,18 @@ void Metronome(){
   }
 }
 
+void noteManager(){
+  for (int i = 0 ; i < activeNotes.size(); i++){
+    if (activeNotes.get(i).getPosition().y >= noteLossLimit){
+      activeNotes.remove(i);
+      playerHealth--;
+      streak = 0;
+    }
+  }
+}
+
 void noteCheck(float lane){
-  targetBar = new PVector (50+(60*(lane-1)), 300);
+  targetBar.x = 50+(60*(lane-1));
   for (int i = 0 ; i < activeNotes.size(); i++){
     if (activeNotes.get(i).getNoteInfo().z == lane && PVector.dist(activeNotes.get(i).getPosition(), targetBar) < 50){
       activeNotes.remove(i);
@@ -137,6 +154,14 @@ void noteCheck(float lane){
         streak = 0;
     }
   }
+}
+
+void healthManager(){
+  for (int i = 0 ; i < playerHealth ; i++){
+     image (heartIcon, 200+(40*i), 10);
+  }
+  if (playerHealth == 0)
+    currentScreen = 5;
 }
 
 
