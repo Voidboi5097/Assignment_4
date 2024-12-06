@@ -13,6 +13,7 @@ int currentScreen = 1;
 int score;
 int noteIndex;
 int streak;
+int playerHealth = 5;
 
 PVector beatTemp = new PVector();
 PVector targetBar = new PVector(50, 300);
@@ -62,7 +63,7 @@ void draw(){
         grasswalk.play();
       }
       Metronome();
-      if (noteIndex >= notes.size()-1){
+      if (noteIndex <= notes.size()-1){
         if (metronome.x == notes.get(noteIndex).getNoteInfo().x && metronome.y == notes.get(noteIndex).getNoteInfo().y){
           println("Added note "+noteIndex);
           activeNotes.add(notes.get(noteIndex));
@@ -71,7 +72,11 @@ void draw(){
       }
       for (int i = activeNotes.size()-1 ; i>= 0 ; i--){
           activeNotes.get(i).Display();
+          noteManager();
       }
+      
+      if (playerHealth <= 0)
+        currentScreen = 5;
       
       if (PVector.dist(metronome, timeLimit) == 0){
         if (score == notes.size())
@@ -89,6 +94,16 @@ void draw(){
     case 5:
       screenManager.failScreen();
       break;
+  }
+}
+
+void noteManager(){
+  for (int i = 0 ; i < activeNotes.size(); i++){
+    if (activeNotes.get(i).getPosition().y >= 350){
+      activeNotes.remove(i);
+      playerHealth--;
+      streak = 0;
+    }
   }
 }
 
@@ -114,6 +129,12 @@ void noteCheck(float lane){
       image(hitSpark, (targetBar.x-25), (targetBar.y-25));
       score++;
       streak++;
+      if (streak == 10 && playerHealth!=5){
+        streak = 0;
+        playerHealth++;
+      }
+      else if (streak == 10)
+        streak = 0;
     }
   }
 }
