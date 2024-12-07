@@ -1,12 +1,32 @@
+/*
+Menus is the class that manages what should be appearing on screen depending on what screen the player is on. It creates these displays using a series of images I created.
+Since all it does is display the menus, the only thing it does is display images and check if the mouse is over the buttons of each screen to highlight them.
+*/
+
 class Menus{
  
   PImage gameName;
+  
+  PImage laneHighway;
+  
+  PImage youRock;
+  
+  PImage score;
+  
+  PImage reallyRock;
+  
+  PImage perfect;
+  
+  PImage fail;
   
   PImage start;
   PImage startHighlight;
   
   PImage quit;
   PImage quitHighlight;
+  
+  PImage retry;
+  PImage retryHighlight;
   
   PImage aButton;
   PImage aButtonPressed;
@@ -26,22 +46,11 @@ class Menus{
   PImage lButton;
   PImage lButtonPressed;
   
-  PImage laneHighway;
+  PImage raindrop;
   
-  PImage youRock;
+/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
   
-  PImage score;
-  
-  PImage reallyRock;
-  
-  PImage perfect;
-  
-  PImage retry;
-  PImage retryHighlight;
-  
-  PImage fail;
-  
-  Menus(){
+  Menus(){                                                                  // Constructor assigns image files to each PImage variable
     gameName = loadImage("Game Name.png");
     
     start = loadImage("Start.png");
@@ -82,11 +91,13 @@ class Menus{
     retryHighlight = loadImage("Retry Highlight.png");
     
     fail = loadImage("Failed.png");
+    
+    raindrop = loadImage("Raindrop.png");
   }
   
-/*-----------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
   
-  void mainMenu(){
+  void mainMenu(){                                                                                // Main Menu screen, includes 2 buttons
     image(gameName, 63,25);
     
     
@@ -103,9 +114,9 @@ class Menus{
       
   }
   
-/*-----------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
   
-  void laneHighway(boolean a, boolean s, boolean d, boolean j, boolean k, boolean l){
+  void laneHighway(boolean a, boolean s, boolean d, boolean j, boolean k, boolean l){              // main Game screen, takes in 6 different booleans in order to highlight a key if the player is holding it down
     
     image (laneHighway, 0, 50);
     
@@ -140,9 +151,9 @@ class Menus{
       image (lButton, 325, 325);
   }
   
-/*-----------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  void winScreen(int points, int maxScore){
+  void winScreen(int points, int maxScore){                                                      // Default win screen. Takes in 2 values to show the player's score/how many notes there are.
     image (youRock, 32,50);
     
     image (score, 125,172);
@@ -164,9 +175,9 @@ class Menus{
     
   }
   
-/*-----------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  void perfectScreen(){
+  void perfectScreen(){                                                                          // perfect win screen. doesn't display score since the player hit every note.
     image (perfect, 1, 25);
     
     image (reallyRock, 45, 140);
@@ -184,12 +195,11 @@ class Menus{
       image(quit,140,300);
   }
   
-/*-----------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  void failScreen(){
+  void failScreen(){                                                                              //Game over screen.
     
     image(fail, 30, 25);
-    
     
     if (mouseX >= 140 && mouseX <= 260 && mouseY >= 225 && mouseY <= 285)
       image(retryHighlight,140,225);

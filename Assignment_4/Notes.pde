@@ -1,21 +1,24 @@
+/*
+Description: Class that manages the note objects. Constructor uses the PVectors created by the beatmap table.
+*/
+
 class Notes{
   
-  PImage noteImage;
+  PImage noteImage;                                                          // PImage for the note
   
-  PVector noteInfo = new PVector();
-  PVector position;
+  PVector noteInfo = new PVector();                                          // PVector that holds the information assigned to the Note upon Construction
+  PVector position;                                                          // PVector that holds the current position of the Note
   
-  float speed = 3;
+  float speed = 3;                                                           // Speed at which the note descends the lane highway. Currently takes 2 seconds to reach the hit zone.
   
-  
-  
+/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
   
   Notes(PVector noteInformation){
     
     noteInfo = noteInformation.copy();
     
-    switch(int(noteInfo.z)){
-      case 1:
+    switch(int(noteInfo.z)){                                                  // This switch case assigns a different image to the noteImage PVector depending on what lane the note is to be created in,
+      case 1:                                                                 // also giving it a position value that corresponds with that lane. Lanes are 1-6 from left to right.
         noteImage = loadImage("Note 1.png");
         position = new PVector(38,-10);
         break;
@@ -42,22 +45,22 @@ class Notes{
     }
   }
 
-/*-----------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  void Display(){
+  void Display(){                                                                                // Function that generates the image for the note and moves it down the note highway
     image (noteImage, position.x, position.y);
     position.y += speed;
   }
   
-/*-----------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  PVector getNoteInfo(){
+  PVector getNoteInfo(){                                                                         // returns noteInfo PVector to check values such as time signature and note type
     return noteInfo;
   }
   
-/*-----------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
   
-  PVector getPosition(){
+  PVector getPosition(){                                                                         // returns position PVector to check where the note is.
     return position;
   }
 }
